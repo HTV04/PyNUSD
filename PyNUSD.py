@@ -127,7 +127,7 @@ def main(titleid, titlever=None, pack_as_wad=True, decryptcontents=False, localu
         cetk = nus.ticket
         if not cetk:
             if os.path.isfile("cetk"):
-                print("    Ticket unavailable, cannot pack. Using local cetk for decryption...")
+                print("    Ticket unavailable, can't pack. Using local cetk for decryption...")
                 pack_as_wad = False
                 with open("cetk", "rb") as f:
                     cetk = WADGEN.Ticket(f.read())

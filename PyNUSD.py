@@ -125,18 +125,22 @@ def main(titleid, titlever=None, pack_as_wad=True, decryptcontents=False, localu
     else:
         print("* Downloading Ticket...")
         cetk = nus.ticket
-        if not cetk:
-            if os.path.isfile("cetk"):
-                print("    Ticket unavailable, can't pack. Using local cetk for decryption...")
-                pack_as_wad = False
-                with open("cetk", "rb") as f:
-                    cetk = WADGEN.Ticket(f.read())
-                cetk.dump(os.path.join(titlepath, "cetk"))
+        if localuse:
+            if not cetk:
+                if os.path.isfile(os.path.join(titlepath, "cetk")):
+                    print("    Ticket unavailable, can't pack. Using local cetk for decryption...")
+                    pack_as_wad = False
+                    with open(os.path.join(titlepath, "cetk"), "rb") as f:
+                        cetk = WADGEN.Ticket(f.read())
+                else:
+                    print("    Ticket unavailable, can't pack nor verify.")
+                    pack_as_wad = False
             else:
+                cetk.dump(os.path.join(titlepath, "cetk"))
+        else:
+            if not cetk:
                 print("    Ticket unavailable, can't pack nor verify.")
                 pack_as_wad = False
-        else:
-            cetk.dump(os.path.join(titlepath, "cetk"))
 
     if decryptcontents and not keepcontents and not cetk:
         print("Aborted, because contents should be deleted and decrypting is not possible.")
